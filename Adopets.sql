@@ -1,4 +1,4 @@
-Drop database if exist  `ADOPETS`;
+Drop database `ADOPETS`;
 CREATE DATABASE `ADOPETS`;
 
 USE `ADOPETS`;
@@ -13,27 +13,27 @@ CREATE TABLE `MEMBER` (
   `phone`              varchar(10) COMMENT '手機',
   `address` 	varchar(50) COMMENT '地址',
   `personImg` 	longblob COMMENT '用戶照片',
-  `createDate` 	timestamp default(now()) COMMENT '建立日期',
+  `createDate` 	datetime default(now()) COMMENT '建立日期',
   `changeDate` 	datetime default(now()) COMMENT '修改時間',
   `lastOLTime` 	datetime default(now()) COMMENT '最後上線時間',
+  `creditCard` 	varchar(45) COMMENT '信用卡卡號',
   PRIMARY KEY (`memID`)
 ) COMMENT = '會員資料';
 
--- 信用卡
-CREATE TABLE `CREDITCARD` (
-  `memID` 		int auto_increment COMMENT '會員編號',
-  `cardNumber` 	varchar(30) not null COMMENT '信用卡卡號',
-  `default` 	int COMMENT '是否為預設',
-  constraint PK_CREDITCARD_memID_cardNumber PRIMARY key (memID,cardNumber),
-  constraint FK_CREDITCARD_memID foreign key (memID) references MEMBER (memID)
-) COMMENT = '信用卡';
+INSERT INTO
+  `MEMBER`(`account`,`password`,`name`)
+VALUES
+  ('nick1111@gmail.com','nick1111','洪克偉'),('nick2222@gmail.com','nick2222','爵宇'),
+  ('nick3333@gmail.com','nick3333','政言'),('nick4444@gmail.com','nick4444','宗德'),
+  ('nick5555@gmail.com','nick5555','育寬');
+
 
  -- 訂單
 
 CREATE TABLE `ORDERS` (
   `orderID` 	INT  AUTO_INCREMENT COMMENT '訂單編號',
   `memID`             INT NOT NULL COMMENT '買家編號',
-  `createTime` 	TIMESTAMP NOT NULL COMMENT '建立時間',
+   `createTime` 	TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT '建立時間',
   `orderPrice` 	INT NOT NULL COMMENT '訂單價格',
   `orderStatus`      INT NOT NULL COMMENT '訂單狀態',
   `paymentType`   INT NOT NULL COMMENT '支付方式',
@@ -42,6 +42,12 @@ CREATE TABLE `ORDERS` (
   constraint FK_ORDERS_memID foreign key (memID)
   references MEMBER (memID)
   )COMMENT = '訂單';
+
+ insert into ORDERS (memID,orderPrice,orderStatus,paymentType,address) values(1,800,1,1, '基隆市南榮路一段89號');
+ insert into ORDERS (memID,orderPrice,orderStatus,paymentType,address) values(2,1000,2,2, '台北市松山區八德路三段77號');
+ insert into ORDERS (memID,orderPrice,orderStatus,paymentType,address) values(3,5000,1,1, '高雄市小港區平津路一段102號');
+ insert into ORDERS (memID,orderPrice,orderStatus,paymentType,address) values(4,2100,2,1, '宜蘭市礁溪區溫泉路二段5號');
+ insert into ORDERS (memID,orderPrice,orderStatus,paymentType,address) values(1,1300,1,2, '台中市后里區凱達格蘭路五段55號');
 
 -- 收容所
 CREATE TABLE SHELTERINFO (
@@ -194,6 +200,65 @@ constraint FK_VALUE_attrID foreign key (attrID)
 references ATTRIBUTES (attrID)
 )COMMENT = '類型屬性值';
 
+	  -- 商品類型
+insert into CATEGORY (ctgName) values('貓罐頭');
+insert into ADOPETS.CATEGORY (ctgName) values('貓乾糧');
+insert into ADOPETS.CATEGORY (ctgName) values('寵物玩具');
+insert into ADOPETS.CATEGORY (ctgName) values('胸帶/項圈');
+insert into ADOPETS.CATEGORY (ctgName) values('外出用品');
+-- 商品屬性
+insert into ATTRIBUTES (ctgID, attrName) values(1,'口味');
+insert into ATTRIBUTES (ctgID, attrName) values(1,'規格');
+insert into ATTRIBUTES (ctgID, attrName) values(2,'口味');
+insert into ATTRIBUTES (ctgID, attrName) values(2,'份量');
+insert into ATTRIBUTES (ctgID, attrName) values(3,'貓齡');
+insert into ATTRIBUTES (ctgID, attrName) values(4,'尺寸');
+insert into ATTRIBUTES (ctgID, attrName) values(4,'顏色');
+-- 商品value
+insert into ADOPETS.VALUE (attrID, value) values(1,'鮭魚');
+insert into ADOPETS.VALUE (attrID, value) values(1,'鮪魚');
+insert into ADOPETS.VALUE (attrID, value) values(1,'鯖魚');
+insert into ADOPETS.VALUE (attrID, value) values(2,'6罐裝');
+insert into ADOPETS.VALUE (attrID, value) values(2,'12罐裝');
+insert into ADOPETS.VALUE (attrID, value) values(2,'18罐裝');
+insert into ADOPETS.VALUE (attrID, value) values(3,'鮭魚');
+insert into ADOPETS.VALUE (attrID, value) values(3,'鱈魚');
+insert into ADOPETS.VALUE (attrID, value) values(3,'雞肉');
+insert into ADOPETS.VALUE (attrID, value) values(4,'5kg');
+insert into ADOPETS.VALUE (attrID, value) values(4,'10kg');
+insert into ADOPETS.VALUE (attrID, value) values(4,'12kg');
+insert into ADOPETS.VALUE (attrID, value) values(5,'幼貓');
+insert into ADOPETS.VALUE (attrID, value) values(5,'成貓');
+insert into ADOPETS.VALUE (attrID, value) values(5,'老貓');
+insert into ADOPETS.VALUE (attrID, value) values(6,'S');
+insert into ADOPETS.VALUE (attrID, value) values(6,'M');
+insert into ADOPETS.VALUE (attrID, value) values(6,'L');
+insert into ADOPETS.VALUE (attrID, value) values(7,'藍');
+insert into ADOPETS.VALUE (attrID, value) values(7,'灰');
+insert into ADOPETS.VALUE (attrID, value) values(7,'綠');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -211,6 +276,13 @@ CREATE TABLE `ADMIN` (
 
 ) COMMENT = '管理員';
 
+INSERT INTO ADMIN (account,password,name,personImg,accStatus) VALUES ('root@yahoo.com.tw','a12345678','root',null,true);
+INSERT INTO ADMIN (account,password,name,personImg,accStatus) VALUES ('st9360606@yahoo.com.tw','a12345678','吳政言',null,true);
+INSERT INTO ADMIN (account,password,name,personImg,accStatus) VALUES ('zack871025@gmail.com','a12345678','林育寬',null,true);
+INSERT INTO ADMIN (account,password,name,personImg,accStatus) VALUES ('nick790308@gmail.com','a12345678','Nick',null,true);
+INSERT INTO ADMIN (account,password,name,personImg,accStatus) VALUES ('splat131468@gmail.com','a12345678','阿德',null,true);
+INSERT INTO ADMIN (account,password,name,personImg,accStatus) VALUES ('famousoneman@gmail.com','a12345678','烏賊',null,true);
+
 
 
 
@@ -219,9 +291,9 @@ CREATE TABLE `DONATE` (
   `memID` 	int COMMENT '會員編號',
   `catID` 	int COMMENT '貓咪編號',
   `shelterName` varchar(30) COMMENT '收容所名稱',
-  `donateName` 	varchar(30) not null COMMENT '捐款人姓名',
+  `donateName` 	varchar(30) COMMENT '捐款人姓名',
   `donateEmail`  varchar(30) not null COMMENT 'email',
-  `phone`       varchar(10)  COMMENT '手機',
+  `phone`       varchar(10)  not null COMMENT '手機',
   `donateAddr` 	varchar(200) COMMENT '捐款人地址',
   `donateAmo` 	int not null COMMENT '金額',
   `donateStatus` 	int COMMENT '捐款狀態',
@@ -240,6 +312,12 @@ CREATE TABLE `DONATE` (
 ) COMMENT = '捐款';
 
 
+INSERT INTO DONATE (memID,catID,shelterName,donateName,donateEmail,phone,
+			donateAddr,donateAmo,donateStatus,donateMes,donateDate) VALUES
+            (null, null, null, "POJO", "POJO@gmail.com", 0909897281, "台北市文化路一段90號", 5000, 1, "好好生活", now());
+
+
+
 
 
 
@@ -249,6 +327,15 @@ CREATE TABLE `AUTH` (
     PRIMARY KEY (`authID`)
 
 ) COMMENT = '權限';
+
+INSERT INTO AUTH (authName) VALUES ('會員管理');
+INSERT INTO AUTH (authName) VALUES ('商品管理');
+INSERT INTO AUTH (authName) VALUES ('訂單管理');
+INSERT INTO AUTH (authName) VALUES ('貓咪管理');
+INSERT INTO AUTH (authName) VALUES ('捐款管理');
+INSERT INTO AUTH (authName) VALUES ('使用者管理');
+INSERT INTO AUTH (authName) VALUES ('權限管理');
+
 
 
 
@@ -261,6 +348,13 @@ CREATE TABLE `AUTHCONFIGURE` (
 	constraint FK_AUTHCONFIGURE_authID foreign key (authID) references AUTH (authID)
 ) COMMENT = '權限配置';
 
+INSERT INTO AUTHCONFIGURE (adminID,authID) VALUES (1, 1);
+INSERT INTO AUTHCONFIGURE (adminID,authID) VALUES (1, 2);
+INSERT INTO AUTHCONFIGURE (adminID,authID) VALUES (1, 3);
+INSERT INTO AUTHCONFIGURE (adminID,authID) VALUES (1, 4);
+INSERT INTO AUTHCONFIGURE (adminID,authID) VALUES (1, 5);
+INSERT INTO AUTHCONFIGURE (adminID,authID) VALUES (1, 6);
+INSERT INTO AUTHCONFIGURE (adminID,authID) VALUES (1, 7);
 
 
   
@@ -268,7 +362,7 @@ CREATE TABLE `AUTHCONFIGURE` (
   orderDetailID  INT  AUTO_INCREMENT COMMENT '明細編號',
   orderID    INT NOT NULL COMMENT '訂單編號',
   skuID          INT NOT NULL COMMENT '規格編號',
-  prodName      VARCHAR(20) NOT NULL COMMENT '商品名稱',
+  prodName      VARCHAR(50) NOT NULL COMMENT '商品名稱',
   prodNum         INT NOT NULL COMMENT '商品數量',
   prodPrice       INT NOT NULL COMMENT '商品單價',
   PRIMARY KEY (`orderDetailID`),
@@ -277,11 +371,18 @@ CREATE TABLE `AUTHCONFIGURE` (
    constraint FK_ORDERDETAIL_skuID foreign key (skuID)
   references SKU (skuID)
   )COMMENT = '訂單明細';
+
+-- insert into ORDERDETAIL (orderID,skuID,prodName,prodNum,prodPrice) values(1,1,"貓罐頭",1, 80);
+-- insert into ORDERDETAIL (orderID,skuID,prodName,prodNum,prodPrice) values(2,2,"貓乾糧",2, 100);
+-- insert into ORDERDETAIL (orderID,skuID,prodName,prodNum,prodPrice) values(2,2,"寵物玩具",5, 50);
+-- insert into ORDERDETAIL (orderID,skuID,prodName,prodNum,prodPrice) values(3,3,"胸帶/項圈",1, 200);
+-- insert into ORDERDETAIL (orderID,skuID,prodName,prodNum,prodPrice) values(4,4,"寵物玩具",1, 5000);
+
   
    CREATE TABLE RULE (
   ruleID    INT  AUTO_INCREMENT COMMENT '規則編號',
   ruleName   VARCHAR(50) NOT NULL COMMENT '規則名稱',
-  ruleDesc   INT NOT NULL COMMENT '規則描述',
+  ruleDesc    VARCHAR(100) NOT NULL COMMENT '規則描述',
   PRIMARY KEY (`ruleID`)
   )COMMENT = '活動規則';
   
@@ -293,7 +394,7 @@ CREATE TABLE `AUTHCONFIGURE` (
   ctgID    INT NOT NULL COMMENT '商品類型',
   ruleID    INT NOT NULL COMMENT '規格編號',
   startTime       timeStamp NOT NULL COMMENT '開始時間',
-  endTime         INT NOT NULL COMMENT '結束時間',
+  endTime         timeStamp NOT NULL COMMENT '結束時間',
   para        DOUBLE NOT NULL COMMENT '參數',
   PRIMARY KEY (`eventID`),
   constraint FK_EVENT_ctgID foreign key (ctgID)
